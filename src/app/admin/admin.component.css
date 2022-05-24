@@ -1,0 +1,47 @@
+.menu-items {
+  list-style: none;
+  padding: 0;
+}
+
+.menu-holder {
+  width: 300px;
+  height: auto;
+  border-right: 1px solid black;
+}
+.contents-holder {
+  margin-left: 10px;
+  width: 700px;
+  height: auto;
+  padding: 15px;
+}
+
+.menu-items li {
+  cursor: pointer;
+  padding: 8px 10px;
+}
+
+.menu-items li a {
+  width: 100%;
+  display: block;
+}
+
+.menu-items li.active {
+  background: #313131;
+}
+
+.menu-items li.active a {
+  color: #FFFFFF;
+}
+
+.menu-items li a {
+  color: #313131;
+  text-decoration: none;
+}
+
+.menu-items li:hover {
+  background: #000000;
+}
+
+.menu-items li:hover a {
+  color: #F5F6F7;
+}

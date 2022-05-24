@@ -1,0 +1,12 @@
+<mat-toolbar>
+  <span>eCommerce APP</span>
+  <span class="example-spacer"></span>
+
+  <button mat-button color="primary">Home</button>
+  <button mat-button color="primary">Products</button>
+  <img class="profile-picture" src="assets/img/johndoe.png" alt="USER" [matMenuTriggerFor]="menu">
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>My Profile</button>
+    <button mat-menu-item (click)="logout()">Logout</button>
+  </mat-menu>
+</mat-toolbar>

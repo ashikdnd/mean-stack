@@ -1,0 +1,11 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.profile-picture {
+  width: 42px;
+  border-radius: 50px;
+  padding: 1px;
+  border: 2px solid #989898;
+  cursor: pointer;
+}
