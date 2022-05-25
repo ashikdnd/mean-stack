@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {ProductService} from "../../services/admin/product.service";
+import {MatTableDataSource} from "@angular/material/table";
+import Swal from 'sweetalert2';
+import {MatDialog} from '@angular/material/dialog';
+import {UpdateComponent} from "./update/update.component";
 
 @Component({
   selector: 'app-manage-products',
@@ -7,32 +11,64 @@ import {ProductService} from "../../services/admin/product.service";
   styleUrls: ['./manage-products.component.css']
 })
 
-
-
 export class ManageProductsComponent implements OnInit {
 
-  productList: any = [];
+  // data: any = this.ps.getProducts();
+  products: any = [];
 
-  data: any = [
-    {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-    {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-    {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-    {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-    {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-    {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-    {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-    {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-    {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-    {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  ];
+  columns = [
+    {name: 'Product', property: 'name', visible: true, isModelProperty: true},
+    {name: 'Description', property: 'description', visible: true, isModelProperty: true},
+    {name: 'Color', property: 'color', visible: true, isModelProperty: true},
+    {name: 'Price', property: 'price', visible: true, isModelProperty: true},
+    {name: 'Actions', property: 'actions', visible: true, isModelProperty: false}
+  ]
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  displayedColumns: string[] = ['name', 'description', 'color', 'price', 'actions'];
+  data = new MatTableDataSource();
 
-  constructor(private ps: ProductService) { }
+  constructor(private ps: ProductService, public dialog: MatDialog) {
+    this.products = this.ps.getProducts();
+    this.data = this.products;
+  }
 
   ngOnInit(): void {
   }
 
+  editProduct(product: any) {
+    const dialogRef = this.dialog.open(UpdateComponent, {
+      height: '400px',
+      width: '600px',
+      data: product
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Update the product after closing the dialog
+      }
+    });
+  }
+
+  deleteProduct(product: any) {
+    Swal.fire({
+      title: '<strong>Are you sure?</strong>',
+      icon: 'info',
+      html: 'You cannot undo this process!',
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const filter = this.products.filter((f: any) => {
+          return f.name != product.name;
+        });
+        this.products = filter;
+        localStorage.setItem('products', JSON.stringify(this.products)); // API
+        this.data = this.products;
+        Swal.fire('Deleted', `${product.name} has been deleted`, 'error');
+      }
+    })
+  }
 
 }

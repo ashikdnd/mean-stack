@@ -1,0 +1,32 @@
+<h1>Update Product</h1>
+
+<div fxLayout="column">
+  <form (submit)="updateProduct()" class="example-form" [formGroup]="productForm">
+    <mat-form-field class="example-full-width" appearance="standard">
+      <mat-label>Product name</mat-label>
+      <input matInput name="name" formControlName="name" readonly>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="standard">
+      <mat-label>Description</mat-label>
+      <textarea matInput name="description" formControlName="description"></textarea>
+    </mat-form-field>
+
+    <div fxLayout="row" fxLayoutGap="15px">
+      <mat-form-field class="example-full-width" appearance="standard">
+        <mat-label>Color</mat-label>
+        <input matInput type="text" name="color" formControlName="color">
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" appearance="standard">
+        <mat-label>Price</mat-label>
+        <input matInput type="text" name="price" formControlName="price">
+      </mat-form-field>
+    </div>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="productForm.invalid">Update</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <button mat-raised-button color="warn" type="button" (click)="close()">Close</button>
+  </form>
+
+</div>

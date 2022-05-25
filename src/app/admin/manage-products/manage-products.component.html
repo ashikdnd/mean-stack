@@ -1,30 +1,23 @@
 <table mat-table [dataSource]="data" class="mat-elevation-z8">
 
-  <!--- Note that these columns can be defined in any order.
-        The actual rendered columns are set as a property on the row definition" -->
-
-  <!-- Position Column -->
-  <ng-container matColumnDef="position">
-    <th mat-header-cell *matHeaderCellDef> Item </th>
-    <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+  <ng-container *ngFor="let column of columns">
+    <ng-container *ngIf="column.isModelProperty" [matColumnDef]="column.property">
+      <th class="column-head" *matHeaderCellDef mat-header-cell mat-sort-header> {{ column.name }}</th>
+      <td *matCellDef="let row" mat-cell
+          style="text-transform: uppercase">
+        {{ row[column.property] }}
+      </td>
+    </ng-container>
   </ng-container>
 
-  <!-- Name Column -->
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Description </th>
-    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-  </ng-container>
-
-  <!-- Weight Column -->
-  <ng-container matColumnDef="weight">
-    <th mat-header-cell *matHeaderCellDef> Color </th>
-    <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-  </ng-container>
-
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef> Price </th>
-    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+  <ng-container>
+    <ng-container matColumnDef="actions">
+      <th style="text-align:center" *matHeaderCellDef class="actions-cell column-head" mat-header-cell mat-sort-header>Actions</th>
+      <td style="text-align:center" *matCellDef="let row" class="actions-cell" mat-cell>
+        <img (click)="editProduct(row)" class="action-icons" src="assets/img/edit.png" alt="E" matTooltip="Edit Product">
+        <img (click)="deleteProduct(row)" class="action-icons" src="assets/img/delete.png" alt="X" matTooltip="Delete Product">
+      </td>
+    </ng-container>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

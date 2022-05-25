@@ -21,6 +21,9 @@ import { ManageProductsComponent } from './admin/manage-products/manage-products
 import { AdminComponent } from './admin/admin.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatTableModule} from "@angular/material/table";
+import {MatTooltipModule} from "@angular/material/tooltip";
+import { UpdateComponent } from './admin/manage-products/update/update.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 @NgModule({
@@ -32,24 +35,27 @@ import {MatTableModule} from "@angular/material/table";
     AddProductComponent,
     ReportsComponent,
     ManageProductsComponent,
-    AdminComponent
+    AdminComponent,
+    UpdateComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        MatInputModule,
-        MatSelectModule,
-        FlexLayoutModule,
-        MatButtonModule,
-        FormsModule,
-        HttpClientModule,
-        MatIconModule,
-        MatToolbarModule,
-        MatMenuModule,
-        ReactiveFormsModule,
-        MatTableModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatInputModule,
+    MatSelectModule,
+    FlexLayoutModule,
+    MatButtonModule,
+    FormsModule,
+    HttpClientModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatMenuModule,
+    ReactiveFormsModule,
+    MatTableModule,
+    MatTooltipModule,
+    MatDialogModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
