@@ -4,6 +4,8 @@ import {MatTableDataSource} from "@angular/material/table";
 import Swal from 'sweetalert2';
 import {MatDialog} from '@angular/material/dialog';
 import {UpdateComponent} from "./update/update.component";
+import { FormControl } from "@angular/forms";
+import {debounceTime, filter} from "rxjs";
 
 @Component({
   selector: 'app-manage-products',
@@ -20,19 +22,38 @@ export class ManageProductsComponent implements OnInit {
     {name: 'Product', property: 'name', visible: true, isModelProperty: true},
     {name: 'Description', property: 'description', visible: true, isModelProperty: true},
     {name: 'Color', property: 'color', visible: true, isModelProperty: true},
-    {name: 'Price', property: 'price', visible: true, isModelProperty: true},
+    {name: 'Price', property: 'price', visible: true, isModelProperty: true, align: 'right'},
+    {name: 'Photo', property: 'photo', visible: true, isModelProperty: true, align: 'right', isImg: true},
     {name: 'Actions', property: 'actions', visible: true, isModelProperty: false}
   ]
 
-  displayedColumns: string[] = ['name', 'description', 'color', 'price', 'actions'];
-  data = new MatTableDataSource();
+  displayedColumns: string[] = ['name', 'description', 'color', 'price', 'actions', 'photo'];
+  dataSource = new MatTableDataSource();
+
+  searchKey: FormControl = new FormControl();
 
   constructor(private ps: ProductService, public dialog: MatDialog) {
     this.products = this.ps.getProducts();
-    this.data = this.products;
+    this.dataSource.data = this.products;
   }
 
   ngOnInit(): void {
+    this.searchKey.valueChanges.pipe(debounceTime(1000)).subscribe((key: string) => {
+      const filteredData = this.products.filter((f: any) => {
+        return f.name.toLowerCase().indexOf(key.toLowerCase()) > -1;
+      });
+      this.dataSource.data = filteredData;
+    })
+    this.ps.productUpdate.subscribe(() => {
+      this.products = this.ps.getProducts();
+      this.dataSource.data = this.products;
+    });
+  }
+
+  applySearch(e: any) {
+    if (e.keyCode === 13) {
+      // Make the search
+    }
   }
 
   editProduct(product: any) {
@@ -65,7 +86,7 @@ export class ManageProductsComponent implements OnInit {
         });
         this.products = filter;
         localStorage.setItem('products', JSON.stringify(this.products)); // API
-        this.data = this.products;
+        this.dataSource.data = this.products;
         Swal.fire('Deleted', `${product.name} has been deleted`, 'error');
       }
     })

@@ -3,6 +3,7 @@ import { FormBuilder } from "@angular/forms";
 import { Validators } from "@angular/forms";
 import {ProductService} from "../../services/admin/product.service";
 import Swal from 'sweetalert2';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-add-product',
@@ -18,13 +19,34 @@ export class AddProductComponent implements OnInit {
     'price': ['', [Validators.required, Validators.pattern('(^\\-?\\d*\\d+.?(\\d{1,2})?$)')]]
   });
 
-  constructor(private fb: FormBuilder, private ps: ProductService) { }
+  productImg: any;
+  productImgB64: any = '';
+
+  constructor(private sanitizer: DomSanitizer, private fb: FormBuilder, private ps: ProductService) { }
 
   ngOnInit(): void {
   }
 
+  sanitizeImageUrl(imageUrl: string): SafeUrl {
+    return this.sanitizer.bypassSecurityTrustUrl(imageUrl);
+  }
+
+  trackFile(file: any) {
+    const f = file.target.files;
+    if (f.length) {
+      this.productImg = URL.createObjectURL(f[0]);
+      const reader = new FileReader();
+      reader.readAsDataURL(f[0]);
+      reader.onload = () => {
+        this.productImgB64 = reader.result;
+      };
+    }
+  }
+
   saveProduct() {
-    this.ps.saveProduct(this.productForm.value);
+    const payload = this.productForm.value;
+    payload.photo = this.productImgB64;
+    this.ps.saveProduct(payload);
     Swal.fire('Success', 'Product saved successfully!', 'success');
     this.clearForm();
     // this.ps.saveProduct(this.productForm.value).subscribe((res: any) => {

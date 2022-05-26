@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import {AuthService} from "../auth.service";
+import { Subject } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -8,12 +9,16 @@ import {AuthService} from "../auth.service";
 export class ProductService {
 
   products: any = [];
+  productUpdate: Subject<any> = new Subject<any>();
 
   constructor(private http: HttpClient, private as: AuthService) {
     this.products = JSON.parse(<string>localStorage.getItem('products'));
   }
 
   saveProduct(payload: any) {
+    if (!this.products) {
+      this.products = [];
+    }
     this.products.push(payload);
     localStorage.setItem('products', JSON.stringify(this.products));
     console.log(this.products);
@@ -32,7 +37,8 @@ export class ProductService {
       return f;
     });
     this.products = filter;
-    localStorage.setItem('products', JSON.stringify(this.products))
+    localStorage.setItem('products', JSON.stringify(this.products));
+    this.productUpdate.next({});
   }
 
   getProducts() {

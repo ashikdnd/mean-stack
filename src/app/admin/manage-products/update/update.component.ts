@@ -20,7 +20,6 @@ export class UpdateComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any, private fb: FormBuilder, private ps: ProductService, private dialogRef: MatDialogRef<any>) { }
 
   ngOnInit(): void {
-    console.log(this.data)
     this.productForm.patchValue({
       name: this.data.name,
       description: this.data.description,

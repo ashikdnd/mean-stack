@@ -1,26 +1,45 @@
-<table mat-table [dataSource]="data" class="mat-elevation-z8">
+<div fxLayout="column">
+  <mat-form-field>
+    <input matInput placeholder="Search Products..." (keyup)="applySearch($event)" [formControl]="searchKey">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
 
-  <ng-container *ngFor="let column of columns">
-    <ng-container *ngIf="column.isModelProperty" [matColumnDef]="column.property">
-      <th class="column-head" *matHeaderCellDef mat-header-cell mat-sort-header> {{ column.name }}</th>
-      <td *matCellDef="let row" mat-cell
-          style="text-transform: uppercase">
-        {{ row[column.property] }}
-      </td>
+  <span *ngIf="!dataSource.data.length">No products available!</span>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="dataSource.data.length">
+
+    <ng-container *ngFor="let column of columns">
+      <ng-container *ngIf="column.isModelProperty && !column.isImg" [matColumnDef]="column.property">
+        <th class="column-head" *matHeaderCellDef mat-header-cell mat-sort-header> {{ column.name }}</th>
+        <td *matCellDef="let row" mat-cell
+            style="text-transform: uppercase">
+          <span *ngIf="column.property != 'price'">{{ row[column.property] }}</span>
+          <span *ngIf="column.property == 'price'" style="font-family: monospace; float: {{column.align}}">{{ row[column.property] | currency : 'INR' }}</span>
+        </td>
+      </ng-container>
     </ng-container>
-  </ng-container>
 
-  <ng-container>
-    <ng-container matColumnDef="actions">
-      <th style="text-align:center" *matHeaderCellDef class="actions-cell column-head" mat-header-cell mat-sort-header>Actions</th>
-      <td style="text-align:center" *matCellDef="let row" class="actions-cell" mat-cell>
-        <img (click)="editProduct(row)" class="action-icons" src="assets/img/edit.png" alt="E" matTooltip="Edit Product">
-        <img (click)="deleteProduct(row)" class="action-icons" src="assets/img/delete.png" alt="X" matTooltip="Delete Product">
-      </td>
+    <ng-container>
+      <ng-container matColumnDef="photo">
+        <th style="text-align:center" *matHeaderCellDef class="actions-cell column-head" mat-header-cell mat-sort-header>Photo</th>
+        <td style="text-align:center" *matCellDef="let row" class="actions-cell" mat-cell>
+          <img style="width: 50px" src="{{row.photo}}">
+        </td>
+      </ng-container>
     </ng-container>
-  </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+    <ng-container>
+      <ng-container matColumnDef="actions">
+        <th style="text-align:center" *matHeaderCellDef class="actions-cell column-head" mat-header-cell mat-sort-header>Actions</th>
+        <td style="text-align:center" *matCellDef="let row" class="actions-cell" mat-cell>
+          <mat-icon (click)="editProduct(row)" class="action-icons" color="primary" matTooltip="Edit Product">mode_edit</mat-icon>
+          <mat-icon (click)="deleteProduct(row)" class="action-icons" color="warn" matTooltip="Delete Product">delete</mat-icon>
+        </td>
+      </ng-container>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
 

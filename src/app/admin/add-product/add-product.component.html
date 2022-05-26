@@ -24,6 +24,11 @@
       </mat-form-field>
     </div>
 
+    <div fxLayout="column" fxLayoutGap="15px" style="margin-bottom: 15px;">
+      <input (change)="trackFile($event)" type="file" name="product_img" id="product_img" accept="image/jpg, image/jpeg, image/png">
+      <img *ngIf="productImg" [src]="sanitizeImageUrl(productImg)" alt="" style="width: 150px; height: 150px">
+    </div>
+
     <button mat-raised-button color="primary" type="submit" [disabled]="productForm.invalid">Save</button>
     &nbsp;&nbsp;&nbsp;&nbsp;
     <button mat-raised-button color="warn" type="button" (click)="clearForm()">RESET</button>
